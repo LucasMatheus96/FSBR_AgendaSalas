@@ -1,5 +1,10 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
+  <ItemGroup>
+    <ProjectReference Include="..\FSBR_AgendaSalas.Application\FSBR_AgendaSalas.Application.csproj" />
+    <ProjectReference Include="..\FSBR_AgendaSalas.Domain\FSBR_AgendaSalas.Domain.csproj" />
+  </ItemGroup>
+
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>

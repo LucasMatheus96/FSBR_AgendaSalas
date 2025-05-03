@@ -11,4 +11,9 @@
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.6.2" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\FSBR_AgendaSalas.Application\FSBR_AgendaSalas.Application.csproj" />
+    <ProjectReference Include="..\FSBR_AgendaSalas.Infra\FSBR_AgendaSalas.Infra.csproj" />
+  </ItemGroup>
+
 </Project>

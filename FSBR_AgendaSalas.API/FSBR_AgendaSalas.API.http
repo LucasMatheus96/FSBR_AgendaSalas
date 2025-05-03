@@ -1,0 +1,6 @@
+@FSBR_AgendaSalas.API_HostAddress = http://localhost:5289
+
+GET {{FSBR_AgendaSalas.API_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

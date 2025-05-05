@@ -9,7 +9,10 @@
   <ItemGroup>
     <Folder Include="Services\" />
     <Folder Include="ValueObjects\" />
-    <Folder Include="Repositories\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.4" />
   </ItemGroup>
 
 </Project>

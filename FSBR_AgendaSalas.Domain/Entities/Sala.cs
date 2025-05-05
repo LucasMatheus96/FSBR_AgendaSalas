@@ -12,6 +12,8 @@ namespace FSBR_AgendaSalas.Domain.Entities
         public string Nome { get; private set; }
         public int Capacidade { get; private set; }
 
+        public ICollection<Reserva> Reservas { get; private set; } = new List<Reserva>();
+
         // Constructor
         public Sala(string nome, int capacidade)
         {

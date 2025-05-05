@@ -1,14 +1,26 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <ItemGroup>
-    <ProjectReference Include="..\FSBR_AgendaSalas.Application\FSBR_AgendaSalas.Application.csproj" />
-    <ProjectReference Include="..\FSBR_AgendaSalas.Domain\FSBR_AgendaSalas.Domain.csproj" />
-  </ItemGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\FSBR_AgendaSalas.Application\FSBR_AgendaSalas.Application.csproj" />
+		<ProjectReference Include="..\FSBR_AgendaSalas.Domain\FSBR_AgendaSalas.Domain.csproj" />
+	</ItemGroup>
 
-  <PropertyGroup>
-    <TargetFramework>net8.0</TargetFramework>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>enable</Nullable>
-  </PropertyGroup>
+	<ItemGroup>
+		<Folder Include="Migrations\" />
+		<Folder Include="DTOs\" />
+		<Folder Include="Services\" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.4" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="8.0.4" />
+		<!-- Adicionei esse pacote -->
+	</ItemGroup>
+
+	<PropertyGroup>
+		<TargetFramework>net8.0</TargetFramework>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Nullable>enable</Nullable>
+	</PropertyGroup>
 
 </Project>

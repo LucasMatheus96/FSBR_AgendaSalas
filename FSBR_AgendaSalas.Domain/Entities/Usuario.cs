@@ -12,12 +12,15 @@ namespace FSBR_AgendaSalas.Domain.Entities
         public string Nome { get; private set; }
         public string Email { get; private set; }
 
+        public ICollection<Reserva> Reservas { get; private set; } = new List<Reserva>();
+
         // Constructor
         public Usuario(string nome, string email)
         {
             Id = Guid.NewGuid();
             Nome = nome;
             Email = email;
+
         }
     }
 }

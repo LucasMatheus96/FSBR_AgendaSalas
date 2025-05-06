@@ -29,9 +29,7 @@ namespace FSBR_AgendaSalas.Application.Services
         }
 
         public async Task AdicionarAsync(Sala sala)
-        {
-            // Verificar se já existe uma sala com o mesmo nome, por exemplo
-            // Se for necessário, você pode adicionar validações para garantir a integridade dos dados.
+        {        
             await _salaRepository.AdicionarAsync(sala);
         }
 
@@ -43,8 +41,6 @@ namespace FSBR_AgendaSalas.Application.Services
                 throw new Exception("Sala não encontrada para atualização.");
             }
 
-            // Se houver mais validações necessárias, faça aqui
-
             await _salaRepository.AtualizarAsync(sala);
         }
 
@@ -55,8 +51,7 @@ namespace FSBR_AgendaSalas.Application.Services
             {
                 throw new Exception("Sala não encontrada para exclusão.");
             }
-
-            // Pode-se adicionar uma lógica para verificar se a sala está em uso antes de excluí-la, se necessário.
+            
             await _salaRepository.DeletarAsync(id);
         }
     }

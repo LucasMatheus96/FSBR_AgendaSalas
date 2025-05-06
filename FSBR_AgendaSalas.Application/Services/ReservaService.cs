@@ -53,5 +53,15 @@ namespace FSBR_AgendaSalas.Application.Services
             // Deletar a reserva no repositório
             await _reservaRepository.DeletarAsync(reservaId);
         }
+
+        public async Task<Reserva> ObterPorIdAsync(Guid id)
+        {
+            return await _reservaRepository.ObterPorIdAsync(id);
+        }
+
+        public async Task<List<Reserva>> ObterReservasPorSalaAsync(Guid salaId, DateTime data)
+        {
+            return await _reservaRepository.ObterReservaPorSalaAsync(salaId, data);
+        }
     }
 }

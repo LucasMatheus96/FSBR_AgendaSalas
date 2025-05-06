@@ -8,11 +8,11 @@ namespace FSBR_AgendaSalas.Domain.Entities
 {
     public class Sala
     {
-        public Guid Id { get; private set; }
-        public string Nome { get; private set; }
-        public int Capacidade { get; private set; }
+        public Guid Id { get; set; }
+        public string Nome { get;  set; }
+        public int Capacidade { get;  set; }
 
-        public ICollection<Reserva> Reservas { get; private set; } = new List<Reserva>();
+        public ICollection<Reserva> Reservas { get; set; } = new List<Reserva>();
 
         // Constructor
         public Sala(string nome, int capacidade)

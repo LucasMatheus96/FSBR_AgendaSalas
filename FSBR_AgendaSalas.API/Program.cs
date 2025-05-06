@@ -1,21 +1,34 @@
+using FSBR_AgendaSalas.Application.Interfaces;
+using FSBR_AgendaSalas.Application.Services;
 using FSBR_AgendaSalas.Domain.Repositories;
+using FSBR_AgendaSalas.Infrastructure.Repositories;  
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+// Adicionar serviços ao contêiner
+builder.Services.AddControllers();
 
+// Registrar os serviços de aplicação (Services)
+builder.Services.AddScoped<IReservaService, ReservaService>();
+builder.Services.AddScoped<ISalaService, SalaService>();
+builder.Services.AddScoped<IUsuarioService, UsuarioService>();
 
-// Repositories
+// Registrar os repositórios (Repositories)
 builder.Services.AddScoped<IReservaRepository, ReservaRepository>();
 builder.Services.AddScoped<ISalaRepository, SalaRepository>();
 builder.Services.AddScoped<IUsuarioRepository, UsuarioRepository>();
 
+//var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+//builder.Services.AddDbContext<AppDbContext>(options =>
+//    options.UseSqlServer(connectionString));
+
+// Configurar Swagger para documentação da API (opcional, mas recomendado para testes)
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
+
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
+// Configuração do middleware
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
@@ -23,30 +36,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+app.UseAuthorization();
 
-var summaries = new[]
-{
-    "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-};
-
-app.MapGet("/weatherforecast", () =>
-{
-    var forecast =  Enumerable.Range(1, 5).Select(index =>
-        new WeatherForecast
-        (
-            DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
-            Random.Shared.Next(-20, 55),
-            summaries[Random.Shared.Next(summaries.Length)]
-        ))
-        .ToArray();
-    return forecast;
-})
-.WithName("GetWeatherForecast")
-.WithOpenApi();
+app.MapControllers();  // Mapear as controllers para que as rotas sejam reconhecidas
 
 app.Run();
-
-record WeatherForecast(DateOnly Date, int TemperatureC, string? Summary)
-{
-    public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
-}

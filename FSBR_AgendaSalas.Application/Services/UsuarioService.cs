@@ -30,7 +30,7 @@ namespace FSBR_AgendaSalas.Application.Services
 
         public async Task AdicionarAsync(Usuario usuario)
         {
-            // Aqui você pode adicionar validações, como verificar se o e-mail do usuário já está cadastrado.
+        
             await _usuarioRepository.AdicionarAsync(usuario);
         }
 
@@ -42,7 +42,7 @@ namespace FSBR_AgendaSalas.Application.Services
                 throw new Exception("Usuário não encontrado para atualização.");
             }
 
-            // Se necessário, adicione mais validações aqui (por exemplo, verificar se o e-mail já existe).
+           
 
             await _usuarioRepository.AtualizarAsync(usuario);
         }

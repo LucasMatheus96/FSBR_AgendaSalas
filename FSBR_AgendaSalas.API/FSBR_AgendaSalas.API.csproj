@@ -13,7 +13,12 @@
 
   <ItemGroup>
     <ProjectReference Include="..\FSBR_AgendaSalas.Application\FSBR_AgendaSalas.Application.csproj" />
-    <ProjectReference Include="..\FSBR_AgendaSalas.Infra\FSBR_AgendaSalas.Infra.csproj" />
+    <ProjectReference Include="..\FSBR_AgendaSalas.Infra\FSBR_AgendaSalas.Infrastructure.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Services\" />
+    <Folder Include="Mappings\" />
   </ItemGroup>
 
 </Project>

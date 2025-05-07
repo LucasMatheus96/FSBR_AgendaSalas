@@ -7,7 +7,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FSBR_AgendaSalas.Domain", "
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FSBR_AgendaSalas.Application", "FSBR_AgendaSalas.Application\FSBR_AgendaSalas.Application.csproj", "{616CC51E-0207-4503-992F-8AD4177BD546}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FSBR_AgendaSalas.Infrastructure", "FSBR_AgendaSalas.Infra\FSBR_AgendaSalas.Infrastructure.csproj", "{A4795402-E825-4793-A994-901EC92CC153}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FSBR_AgendaSalas.Infrastructure", "FSBR_AgendaSalas.Infrastructure\FSBR_AgendaSalas.Infrastructure.csproj", "{A4795402-E825-4793-A994-901EC92CC153}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FSBR_AgendaSalas.API", "FSBR_AgendaSalas.API\FSBR_AgendaSalas.API.csproj", "{55DC7AEF-11B7-46DA-939A-75809637EB21}"
 EndProject

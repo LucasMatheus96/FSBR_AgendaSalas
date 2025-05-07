@@ -9,15 +9,15 @@ using System.Threading.Tasks;
 
 namespace FSBR_AgendaSalas.Infra.Persistence.Configurations
 {
-    public class SalaConfiguration : IEntityTypeConfiguration<Sala>
+    public class UsuarioConfiguration : IEntityTypeConfiguration<Usuario>
     {
-        public void Configure(EntityTypeBuilder<Sala> builder)
+        public void Configure(EntityTypeBuilder<Usuario> builder)
         {
-            builder.ToTable("Reservas");
+            builder.ToTable("Usuario");
 
             builder.HasKey(r => r.Id);
 
-            builder.Property(r => r.Capacidade)
+            builder.Property(r => r.Email)
                    .IsRequired();
 
             builder.Property(r => r.Nome)

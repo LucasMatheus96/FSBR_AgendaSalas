@@ -23,8 +23,8 @@
   <ItemGroup>
     <ProjectReference Include="..\FSBR_AgendaSalas.Domain\FSBR_AgendaSalas.Domain.csproj" />
     <ProjectReference Include="..\FSBR_AgendaSalas.Application\FSBR_AgendaSalas.Application.csproj" />
-    <ProjectReference Include="..\FSBR_AgendaSalas.Infra\FSBR_AgendaSalas.Infra.csproj" />
     <ProjectReference Include="..\FSBR_AgendaSalas.API\FSBR_AgendaSalas.API.csproj" />
+    <ProjectReference Include="..\FSBR_AgendaSalas.Infrastructure\FSBR_AgendaSalas.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>

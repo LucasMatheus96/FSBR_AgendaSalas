@@ -11,6 +11,8 @@ namespace FSBR_AgendaSalas.Infrastructure.Persistence.Configurations
             builder.ToTable("Reservas");
 
             builder.HasKey(r => r.Id);
+            builder.Property(r => r.Id)
+                  .ValueGeneratedOnAdd();
 
             builder.Property(r => r.DataHoraReserva)
                    .IsRequired();

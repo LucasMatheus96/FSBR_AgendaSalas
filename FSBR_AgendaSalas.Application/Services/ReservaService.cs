@@ -19,7 +19,7 @@ namespace FSBR_AgendaSalas.Application.Services
             _emailService = emailService;
         }
 
-        public async Task CriarReservaAsync(Guid salaId, Guid usuarioId, DateTime dataHora, string emailUsuario)
+        public async Task CriarReservaAsync(int id ,int salaId, int usuarioId, DateTime dataHora, string emailUsuario)
         {
             var sala = await _salaRepository.ObterPorIdAsync(salaId);
             var usuario = await _usuarioRepository.ObterPorIdAsync(usuarioId);
@@ -32,13 +32,13 @@ namespace FSBR_AgendaSalas.Application.Services
             if (reservas.Any(r => r.DataHoraReserva == dataHora))
                 throw new Exception("Já existe uma reserva para esta sala neste horário.");
 
-            var reserva = new Reserva(salaId, usuarioId, dataHora);
+            var reserva = new Reserva(id,salaId, usuarioId, dataHora);
             await _reservaRepository.AdicionarAsync(reserva);
             await _emailService.EnviarEmailAsync(emailUsuario, "Reserva confirmada", "<h1>Sua reserva foi confirmada!</h1>");
 
         }
 
-        public async Task CancelarReservaAsync(Guid reservaId)
+        public async Task CancelarReservaAsync(int reservaId)
         {
             var reserva = await _reservaRepository.ObterPorIdAsync(reservaId);
             if (reserva == null) throw new Exception("Reserva não encontrada.");
@@ -47,7 +47,7 @@ namespace FSBR_AgendaSalas.Application.Services
             await _reservaRepository.AtualizarAsync(reserva);
         }
 
-        public async Task DeletarReservaAsync(Guid reservaId)
+        public async Task DeletarReservaAsync(int reservaId)
         {
             var reserva = await _reservaRepository.ObterPorIdAsync(reservaId);
             if (reserva == null)
@@ -57,12 +57,12 @@ namespace FSBR_AgendaSalas.Application.Services
             await _reservaRepository.DeletarAsync(reservaId);
         }
 
-        public async Task<Reserva> ObterPorIdAsync(Guid id)
+        public async Task<Reserva> ObterPorIdAsync(int id)
         {
             return await _reservaRepository.ObterPorIdAsync(id);
         }
 
-        public async Task<List<Reserva>> ObterReservasPorSalaAsync(Guid salaId, DateTime data)
+        public async Task<List<Reserva>> ObterReservasPorSalaAsync(int salaId, DateTime data)
         {
             return await _reservaRepository.ObterReservaPorSalaAsync(salaId, data);
         }

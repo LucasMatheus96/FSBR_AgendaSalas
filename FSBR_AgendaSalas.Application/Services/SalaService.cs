@@ -13,7 +13,7 @@ namespace FSBR_AgendaSalas.Application.Services
             _salaRepository = salaRepository;
         }
 
-        public async Task<Sala> ObterPorIdAsync(Guid id)
+        public async Task<Sala> ObterPorIdAsync(int id)
         {
             var sala = await _salaRepository.ObterPorIdAsync(id);
             if (sala == null)
@@ -44,7 +44,7 @@ namespace FSBR_AgendaSalas.Application.Services
             await _salaRepository.AtualizarAsync(sala);
         }
 
-        public async Task DeleteAsync(Guid id)
+        public async Task DeleteAsync(int id)
         {
             var salaExistente = await _salaRepository.ObterPorIdAsync(id);
             if (salaExistente == null)

@@ -9,10 +9,10 @@ namespace FSBR_AgendaSalas.Domain.Repositories
 {
     public interface IUsuarioRepository
     {
-        Task<Usuario?> ObterPorIdAsync(Guid id);
+        Task<Usuario?> ObterPorIdAsync(int id);
         Task<List<Usuario>> ObterTodosAsync();
         Task AdicionarAsync(Usuario usuario);
         Task AtualizarAsync(Usuario usuario);
-        Task DeleteAsync(Guid id);
+        Task DeleteAsync(int id);
     }
 }

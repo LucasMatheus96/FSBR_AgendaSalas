@@ -9,10 +9,10 @@ namespace FSBR_AgendaSalas.Domain.Repositories
 {
     public interface ISalaRepository
     {
-        Task<Sala?> ObterPorIdAsync(Guid id);
+        Task<Sala?> ObterPorIdAsync(int id);
         Task<List<Sala>> ObterTodasAsync();
         Task AdicionarAsync(Sala sala);
         Task AtualizarAsync(Sala sala);
-        Task DeletarAsync(Guid id);
+        Task DeletarAsync(int id);
     }
 }

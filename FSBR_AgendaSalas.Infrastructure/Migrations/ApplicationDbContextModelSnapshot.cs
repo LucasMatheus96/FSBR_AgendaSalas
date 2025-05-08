@@ -24,22 +24,24 @@ namespace FSBR_AgendaSalas.Infrastructure.Migrations
 
             modelBuilder.Entity("FSBR_AgendaSalas.Domain.Entities.Reserva", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<DateTime>("DataHoraReserva")
                         .HasColumnType("datetime2");
 
-                    b.Property<Guid>("SalaId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<int>("SalaId")
+                        .HasColumnType("int");
 
                     b.Property<string>("Status")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid>("UsuarioId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<int>("UsuarioId")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -52,9 +54,11 @@ namespace FSBR_AgendaSalas.Infrastructure.Migrations
 
             modelBuilder.Entity("FSBR_AgendaSalas.Domain.Entities.Sala", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<int>("Capacidade")
                         .HasColumnType("int");
@@ -70,9 +74,11 @@ namespace FSBR_AgendaSalas.Infrastructure.Migrations
 
             modelBuilder.Entity("FSBR_AgendaSalas.Domain.Entities.Usuario", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Email")
                         .IsRequired()

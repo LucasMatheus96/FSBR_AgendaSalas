@@ -21,19 +21,19 @@ namespace FSBR_AgendaSalas.API.Controllers
         [HttpPost]
         public async Task<IActionResult> Criar([FromBody] CriarReservaDTO dto)
         {
-            await _reservaService.CriarReservaAsync(dto.SalaId, dto.UsuarioId, dto.DataHoraReserva,dto.EmailUsuario);
+            await _reservaService.CriarReservaAsync(dto.Id,dto.SalaId, dto.UsuarioId, dto.DataHoraReserva,dto.EmailUsuario);
             return Ok();
         }
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> Deletar(Guid id)
+        public async Task<IActionResult> Deletar(int id)
         {
             await _reservaService.DeletarReservaAsync(id);
             return NoContent();
         }
 
         [HttpGet("{id}")]
-        public async Task<IActionResult> ObterPorId(Guid id)
+        public async Task<IActionResult> ObterPorId(int id)
         {
             var reserva = await _reservaService.ObterPorIdAsync(id);
             if (reserva == null) return NotFound();
@@ -47,7 +47,7 @@ namespace FSBR_AgendaSalas.API.Controllers
         }
 
         [HttpGet("sala/{salaId}/data/{data}")]
-        public async Task<IActionResult> ObterPorSalaEData(Guid salaId, DateTime data)
+        public async Task<IActionResult> ObterPorSalaEData(int salaId, DateTime data)
         {
             var reservas = await _reservaService.ObterReservasPorSalaAsync(salaId, data);
             return Ok(reservas.Select(r => new ReservaDTO
@@ -60,7 +60,7 @@ namespace FSBR_AgendaSalas.API.Controllers
         }
 
         [HttpPut("cancelar/{id}")]
-        public async Task<IActionResult> Cancelar(Guid id)
+        public async Task<IActionResult> Cancelar(int id)
         {
             await _reservaService.CancelarReservaAsync(id);
             return NoContent();

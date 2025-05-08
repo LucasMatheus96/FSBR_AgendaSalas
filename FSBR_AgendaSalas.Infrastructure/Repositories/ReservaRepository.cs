@@ -15,7 +15,7 @@ namespace FSBR_AgendaSalas.Infrastructure.Repositories
             _context = context;
         }
 
-        public async Task<Reserva?> ObterPorIdAsync(Guid id)
+        public async Task<Reserva?> ObterPorIdAsync(int id)
         {
             return await _context.Reservas
                 .Include(r => r.Sala)
@@ -23,7 +23,7 @@ namespace FSBR_AgendaSalas.Infrastructure.Repositories
                 .FirstOrDefaultAsync(r => r.Id == id);
         }
 
-        public async Task<List<Reserva>> ObterReservaPorSalaAsync(Guid salaId, DateTime data)
+        public async Task<List<Reserva>> ObterReservaPorSalaAsync(int salaId, DateTime data)
         {
             return await _context.Reservas
                 .Include(r => r.Sala)
@@ -43,7 +43,7 @@ namespace FSBR_AgendaSalas.Infrastructure.Repositories
             await _context.SaveChangesAsync();
         }
 
-        public async Task DeletarAsync(Guid id)
+        public async Task DeletarAsync(int id)
         {
             var reserva = await ObterPorIdAsync(id);
             if (reserva != null)

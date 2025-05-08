@@ -22,7 +22,7 @@ public class SalaController : ControllerBase
     }
 
     [HttpGet("{id}")]
-    public async Task<ActionResult<SalaDto>> GetById(Guid id)
+    public async Task<ActionResult<SalaDto>> GetById(int id)
     {
         var sala = await _salaService.ObterPorIdAsync(id);
         if (sala == null) return NotFound();
@@ -33,13 +33,13 @@ public class SalaController : ControllerBase
     [HttpPost]
     public async Task<ActionResult> Post([FromBody] CriarSalaDto dto)
     {
-        var sala = new Sala(dto.Nome, dto.Capacidade);
+        var sala = new Sala(dto.Id,dto.Nome, dto.Capacidade);
         await _salaService.AdicionarAsync(sala);
         return CreatedAtAction(nameof(GetById), new { id = sala.Id }, null);
     }
 
     [HttpPut("{id}")]
-    public async Task<ActionResult> Put(Guid id, [FromBody] CriarSalaDto dto)
+    public async Task<ActionResult> Put(int id, [FromBody] CriarSalaDto dto)
     {
         var sala = await _salaService.ObterPorIdAsync(id);
         if (sala == null) return NotFound();
@@ -50,7 +50,7 @@ public class SalaController : ControllerBase
     }
 
     [HttpDelete("{id}")]
-    public async Task<ActionResult> Delete(Guid id)
+    public async Task<ActionResult> Delete(int id)
     {
         await _salaService.DeleteAsync(id);
         return NoContent();

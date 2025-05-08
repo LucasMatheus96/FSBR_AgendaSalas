@@ -13,7 +13,7 @@ namespace FSBR_AgendaSalas.Infrastructure.Repositories
         {
             _context = context;
         }
-        public async Task<Sala?> ObterPorIdAsync(Guid id)
+        public async Task<Sala?> ObterPorIdAsync(int id)
         {
             return await _context.Salas
                 .FirstOrDefaultAsync(s => s.Id == id);
@@ -36,7 +36,7 @@ namespace FSBR_AgendaSalas.Infrastructure.Repositories
             await _context.SaveChangesAsync();
         }
 
-        public async Task DeletarAsync(Guid id)
+        public async Task DeletarAsync(int id)
         {
             var sala = await _context.Salas.FindAsync(id);
             if (sala != null)

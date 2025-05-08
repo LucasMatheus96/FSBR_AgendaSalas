@@ -13,7 +13,7 @@ namespace FSBR_AgendaSalas.Application.Services
             _usuarioRepository = usuarioRepository;
         }
 
-        public async Task<Usuario> ObterPorIdAsync(Guid id)
+        public async Task<Usuario> ObterPorIdAsync(int id)
         {
             var usuario = await _usuarioRepository.ObterPorIdAsync(id);
             if (usuario == null)
@@ -47,7 +47,7 @@ namespace FSBR_AgendaSalas.Application.Services
             await _usuarioRepository.AtualizarAsync(usuario);
         }
 
-        public async Task DeleteAsync(Guid id)
+        public async Task DeleteAsync(int id)
         {
             var usuarioExistente = await _usuarioRepository.ObterPorIdAsync(id);
             if (usuarioExistente == null)

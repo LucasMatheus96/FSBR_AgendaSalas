@@ -15,12 +15,14 @@ namespace FSBR_AgendaSalas.Infra.Persistence.Configurations
         {
             builder.ToTable("Salas");
 
-            builder.HasKey(r => r.Id);
+            builder.HasKey(s => s.Id);
+            builder.Property(s => s.Id)
+                   .ValueGeneratedOnAdd();
 
-            builder.Property(r => r.Capacidade)
+            builder.Property(s => s.Capacidade)
                    .IsRequired();
 
-            builder.Property(r => r.Nome)
+            builder.Property(s => s.Nome)
                    .HasConversion<string>()
                    .IsRequired();
 

@@ -14,9 +14,9 @@ namespace FSBR_AgendaSalas.Domain.Entities
 
     public class Reserva
     {
-        public Guid Id { get; private set; }
-        public Guid SalaId { get; private set; }
-        public Guid UsuarioId { get; private set; }
+        public int Id { get; private set; }
+        public int SalaId { get; private set; }
+        public int UsuarioId { get; private set; }
         public DateTime DataHoraReserva { get; private set; }
         public StatusReserva Status { get; private set; }
 
@@ -25,23 +25,16 @@ namespace FSBR_AgendaSalas.Domain.Entities
 
       
 
-        public Reserva(Guid salaId, Guid usuarioId, DateTime dataHoraReserva)
+        public Reserva(int id , int salaId, int usuarioId, DateTime dataHoraReserva)
         {
-            Id = Guid.NewGuid();
+            Id = id;
             SalaId = salaId;
             UsuarioId = usuarioId;
             DataHoraReserva = dataHoraReserva;
             Status = StatusReserva.Confirmada; 
         }
 
-        public Reserva(Guid id, Guid salaId, Guid usuarioId, DateTime dataHoraReserva)
-        {
-            Id = id;
-            SalaId = salaId;
-            UsuarioId = usuarioId;
-            DataHoraReserva = dataHoraReserva;
-            Status = StatusReserva.Confirmada;
-        }
+      
 
 
         public void CancelarReserva()

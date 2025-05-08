@@ -4,11 +4,11 @@ namespace FSBR_AgendaSalas.Domain.Repositories
 {
     public interface IReservaRepository
     {
-        Task<Reserva?> ObterPorIdAsync(Guid id);
-        Task<List<Reserva>> ObterReservaPorSalaAsync(Guid salaId, DateTime data);
+        Task<Reserva?> ObterPorIdAsync(int id);
+        Task<List<Reserva>> ObterReservaPorSalaAsync(int salaId, DateTime data);
         Task<List<Reserva>> ObterTodasAsync();
         Task AdicionarAsync(Reserva reserva);
         Task AtualizarAsync(Reserva reserva);
-        Task DeletarAsync(Guid id);
+        Task DeletarAsync(int id);
     }
 }

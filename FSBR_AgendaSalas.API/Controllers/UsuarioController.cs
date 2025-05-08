@@ -22,7 +22,7 @@ public class UsuarioController : ControllerBase
     }
 
     [HttpGet("{id}")]
-    public async Task<ActionResult<UsuarioDto>> GetById(Guid id)
+    public async Task<ActionResult<UsuarioDto>> GetById(int id)
     {
         var usuario = await _usuarioService.ObterPorIdAsync(id);
         if (usuario == null) return NotFound();
@@ -33,13 +33,13 @@ public class UsuarioController : ControllerBase
     [HttpPost]
     public async Task<ActionResult> Post([FromBody] CriarUsuarioDto dto)
     {
-        var usuario = new Usuario(dto.Nome,dto.Email);
+        var usuario = new Usuario(dto.id,dto.Nome,dto.Email);
         await _usuarioService.AdicionarAsync(usuario);
         return CreatedAtAction(nameof(GetById), new { id = usuario.Id }, null);
     }
 
     [HttpPut("{id}")]
-    public async Task<ActionResult> Put(Guid id, [FromBody] CriarUsuarioDto dto)
+    public async Task<ActionResult> Put(int id, [FromBody] CriarUsuarioDto dto)
     {
         var usuario = await _usuarioService.ObterPorIdAsync(id);
         if (usuario == null) return NotFound();
@@ -50,7 +50,7 @@ public class UsuarioController : ControllerBase
     }
 
     [HttpDelete("{id}")]
-    public async Task<ActionResult> Delete(Guid id)
+    public async Task<ActionResult> Delete(int id)
     {
         await _usuarioService.DeleteAsync(id);
         return NoContent();

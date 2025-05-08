@@ -60,7 +60,7 @@ namespace FSBR_AgendaSalas.MVC.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Delete(Guid id)
+        public async Task<IActionResult> Delete(int id)
         {
             var response = await _httpClient.DeleteAsync($"https://localhost:7081/api/sala/{id}");
             return RedirectToAction("Index");

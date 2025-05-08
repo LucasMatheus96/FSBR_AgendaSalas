@@ -4,21 +4,13 @@ namespace FSBR_AgendaSalas.Domain.Entities
 {
     public class Usuario
     {
-        public Guid Id { get; private set; }
+        public int Id { get; private set; }
         public string Nome { get; private set; }
         public string Email { get; private set; }
 
-        public ICollection<Reserva> Reservas { get; private set; } = new List<Reserva>();
+        public ICollection<Reserva> Reservas { get; private set; } = new List<Reserva>();      
 
-        public Usuario(string nome, string email)
-        {
-            Id = Guid.NewGuid();
-            Nome = nome;
-            Email = email;
-
-        }
-
-        public Usuario(Guid id,string nome, string email)
+        public Usuario(int id,string nome, string email)
         {
             Id = id;
             Nome = nome;

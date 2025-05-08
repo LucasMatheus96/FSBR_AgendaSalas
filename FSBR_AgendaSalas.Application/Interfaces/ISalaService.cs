@@ -5,10 +5,10 @@ namespace FSBR_AgendaSalas.Application.Interfaces
 
     public interface ISalaService
     {
-        Task<Sala> ObterPorIdAsync(Guid id);
+        Task<Sala> ObterPorIdAsync(int id);
         Task<List<Sala>> ObterTodasAsync();
         Task AdicionarAsync(Sala sala);
         Task AtualizarAsync(Sala sala);
-        Task DeleteAsync(Guid id);
+        Task DeleteAsync(int id);
     }
 }

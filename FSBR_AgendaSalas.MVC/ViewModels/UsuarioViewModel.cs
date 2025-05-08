@@ -4,7 +4,7 @@ namespace FSBR_AgendaSalas.MVC.ViewModels
 {
     public class UsuarioViewModel
     {
-        public Guid Id { get; set; }
+        public int Id { get; set; }
 
         [Required(ErrorMessage = "O nome é obrigatório")]
         public string Nome { get; set; }

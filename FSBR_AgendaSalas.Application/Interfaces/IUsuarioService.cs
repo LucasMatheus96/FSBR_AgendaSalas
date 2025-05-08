@@ -7,10 +7,10 @@ namespace FSBR_AgendaSalas.Application.Interfaces
 
     public interface IUsuarioService
     {
-        Task<Usuario> ObterPorIdAsync(Guid id);
+        Task<Usuario> ObterPorIdAsync(int id);
         Task<List<Usuario>> ObterTodosAsync();
         Task AdicionarAsync(Usuario usuario);
         Task AtualizarAsync(Usuario usuario);
-        Task DeleteAsync(Guid id);
+        Task DeleteAsync(int id);
     }
 }

@@ -18,7 +18,7 @@ public class SalaController : ControllerBase
     public async Task<ActionResult<IEnumerable<SalaDto>>> Get()
     {
         var salas = await _salaService.ObterTodasAsync();
-        return Ok(salas.Select(s => new SalaDto { Id = s.Id, Nome = s.Nome }));
+        return Ok(salas.Select(s => new SalaDto { Id = s.Id, Nome = s.Nome , Capacidade = s.Capacidade}));
     }
 
     [HttpGet("{id}")]
@@ -52,7 +52,7 @@ public class SalaController : ControllerBase
     [HttpDelete("{id}")]
     public async Task<ActionResult> Delete(Guid id)
     {
-        await _salaService.DeletarAsync(id);
+        await _salaService.DeleteAsync(id);
         return NoContent();
     }
 }

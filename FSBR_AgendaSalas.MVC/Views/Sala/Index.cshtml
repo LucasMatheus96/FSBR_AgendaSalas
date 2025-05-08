@@ -2,9 +2,19 @@
 
 @{
     ViewData["Title"] = "Lista de Salas";
+    var novaSala = new FSBR_AgendaSalas.MVC.ViewModels.SalaViewModel();
 }
 
 <h1>@ViewData["Title"]</h1>
+
+<div class="d-flex  mb-3">
+    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalCadastroSala">
+        Nova Sala
+    </button>
+</div>
+
+
+
 
 <table class="table">
     <thead>
@@ -21,10 +31,86 @@
                 <td>@sala.Nome</td>
                 <td>@sala.Capacidade</td>
                 <td>
-                    <!-- Ações para editar ou reservar, etc -->
-                    <a href="/sala/Detalhes/@sala.Id">Detalhes</a>
+                    <!-- Botão para abrir o modal de edição -->
+                    <button type="button" class="btn btn-sm btn-warning me-2"
+                            data-bs-toggle="modal"
+                            data-bs-target="#modalEditarSala_@sala.Id">
+                        Alterar
+                    </button>
+
+                    <!-- Botão de exclusão -->
+                    <form asp-action="Delete" asp-controller="Sala"  method="post" style="display:inline;"
+                          onsubmit="return confirm('Tem certeza que deseja excluir esta sala?');">
+                        <input type="hidden" name="id" value="@sala.Id" />
+                        <button type="submit" class="btn btn-sm btn-danger">Excluir</button>
+                    </form>
                 </td>
             </tr>
         }
     </tbody>
 </table>
+
+<!-- Modal de Cadastro -->
+<div class="modal fade" id="modalCadastroSala" tabindex="-1" aria-labelledby="modalCadastroSalaLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form asp-controller="Sala" asp-action="Create" method="post">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalCadastroSalaLabel">Cadastrar Nova Sala</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group mb-3">
+                        <label asp-for="@novaSala.Nome" class="form-label"></label>
+                        <input asp-for="@novaSala.Nome" name="Nome" class="form-control" />
+                        <span asp-validation-for="@novaSala.Nome" class="text-danger"></span>
+                    </div>
+                    <div class="form-group mb-3">
+                        <label asp-for="@novaSala.Capacidade" class="form-label"></label>
+                        <input asp-for="@novaSala.Capacidade" name="Capacidade" class="form-control" />
+                        <span asp-validation-for="@novaSala.Capacidade" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-success">Salvar</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@foreach (var sala in Model)
+{
+    <div class="modal fade" id="modalEditarSala_@sala.Id" tabindex="-1" aria-labelledby="modalEditarSalaLabel_@sala.Id" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form asp-controller="Sala" asp-action="Edit" method="post">
+                    <input type="hidden" name="Id" value="@sala.Id" />
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="modalEditarSalaLabel_@sala.Id">Editar Sala</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group mb-3">
+                            <label for="Nome">Nome</label>
+                            <input name="Nome" class="form-control" value="@sala.Nome" required />
+                        </div>
+                        <div class="form-group mb-3">
+                            <label for="Capacidade">Capacidade</label>
+                            <input name="Capacidade" type="number" class="form-control" value="@sala.Capacidade" required />
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-success">Salvar Alterações</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+}
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

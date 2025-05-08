@@ -1,6 +1,7 @@
-﻿namespace FSBR_AgendaSalas.Application.Interfaces
+﻿using FSBR_AgendaSalas.Domain.Entities;
+
+namespace FSBR_AgendaSalas.Application.Interfaces
 {
-    using FSBR_AgendaSalas.Domain.Entities;
 
     public interface ISalaService
     {
@@ -8,6 +9,6 @@
         Task<List<Sala>> ObterTodasAsync();
         Task AdicionarAsync(Sala sala);
         Task AtualizarAsync(Sala sala);
-        Task DeletarAsync(Guid id);
+        Task DeleteAsync(Guid id);
     }
 }

@@ -44,7 +44,7 @@ namespace FSBR_AgendaSalas.Application.Services
             await _salaRepository.AtualizarAsync(sala);
         }
 
-        public async Task DeletarAsync(Guid id)
+        public async Task DeleteAsync(Guid id)
         {
             var salaExistente = await _salaRepository.ObterPorIdAsync(id);
             if (salaExistente == null)

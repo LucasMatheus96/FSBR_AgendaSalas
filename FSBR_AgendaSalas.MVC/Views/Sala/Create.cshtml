@@ -1,0 +1,30 @@
+﻿@model FSBR_AgendaSalas.MVC.ViewModels.SalaViewModel
+
+@{
+    ViewData["Title"] = "Nova Sala";
+}
+
+<h2>Cadastrar Nova Sala</h2>
+
+<form asp-action="Create" method="post">
+    <div class="form-group">
+        <label asp-for="Nome"></label>
+        <input asp-for="Nome" class="form-control" />
+        <span asp-validation-for="Nome" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Capacidade"></label>
+        <input asp-for="Capacidade" class="form-control" />
+        <span asp-validation-for="Capacidade" class="text-danger"></span>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Salvar</button>
+    <a asp-action="Index" class="btn btn-secondary">Cancelar</a>
+</form>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

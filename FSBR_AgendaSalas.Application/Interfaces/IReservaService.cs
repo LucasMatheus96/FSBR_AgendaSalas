@@ -9,7 +9,7 @@ namespace FSBR_AgendaSalas.Application.Interfaces
         Task DeletarReservaAsync(Guid reservaId);
 
         Task<Reserva> ObterPorIdAsync(Guid id);
-
         Task<List<Reserva>> ObterReservasPorSalaAsync(Guid salaId, DateTime data);
+        Task<List<Reserva>> ObterTodasAsync();
     }
 }

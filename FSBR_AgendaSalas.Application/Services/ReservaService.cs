@@ -66,5 +66,13 @@ namespace FSBR_AgendaSalas.Application.Services
         {
             return await _reservaRepository.ObterReservaPorSalaAsync(salaId, data);
         }
+
+
+        public async Task<List<Reserva>> ObterTodasAsync()
+        {
+            return await _reservaRepository.ObterTodasAsync();
+        }
+
+
     }
 }

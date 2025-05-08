@@ -1,0 +1,118 @@
+﻿@model IEnumerable<FSBR_AgendaSalas.MVC.ViewModels.ReservaViewModel>
+
+@{
+    ViewData["Title"] = "Lista de reservas:";
+    var novaReserva = new FSBR_AgendaSalas.MVC.ViewModels.ReservaViewModel();
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<div class="d-flex  mb-3">
+    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalCadastroReserva">
+        Nova Reserva
+    </button>
+</div>
+
+
+
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Nome</th>
+            <th>Reserva</th>
+            <th>Sala</th>
+            <th>Horário agendado</th>
+            <th>Ações</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var reserva in Model)
+        {
+            <tr>
+                <td>@reserva.Id</td>
+                <td>@reserva.EmailUsuario</td>
+                <td>
+                    <!-- Botão para abrir o modal de edição -->
+                    <button type="button" class="btn btn-sm btn-warning me-2"
+                            data-bs-toggle="modal"
+                            data-bs-target="#modalEditarReserva_@reserva.Id">
+                        Alterar
+                    </button>
+
+                    <!-- Botão de exclusão -->
+                    <form asp-action="Delete" asp-controller="reserva" method="post" style="display:inline;"
+                          onsubmit="return confirm('Tem certeza que deseja excluir esta Reserva?');">
+                        <input type="hidden" name="id" value="@reserva.Id" />
+                        <button type="submit" class="btn btn-sm btn-danger">Excluir</button>
+                    </form>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<!-- Modal de Cadastro -->
+<div class="modal fade" id="modalCadastroReserva" tabindex="-1" aria-labelledby="modalCadastroReservaLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form asp-controller="Reserva" asp-action="Create" method="post">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalCadastroReservaLabel">Cadastrar Nova Reserva</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group mb-3">
+                        <label asp-for="@novaReserva.Id" class="form-label"></label>
+                        <input asp-for="@novaReserva.SalaId" name="Nome" class="form-control" />
+                        <span asp-validation-for="@novaReserva.SalaId" class="text-danger"></span>
+                    </div>
+                    <div class="form-group mb-3">
+                        <label asp-for="@novaReserva.Id" class="form-label"></label>
+                        <input asp-for="@novaReserva.Id" name="Email" class="form-control" />
+                        <span asp-validation-for="@novaReserva.Id" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-success">Salvar</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@foreach (var Reserva in Model)
+{
+    <div class="modal fade" id="modalEditarReserva_@Reserva.Id" tabindex="-1" aria-labelledby="modalEditarReservaLabel_@Reserva.Id" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form asp-controller="Reserva" asp-action="Edit" method="post">
+                    <input type="hidden" name="Id" value="@Reserva.Id" />
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="modalEditarReservaLabel_@Reserva.Id">Editar Reserva</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group mb-3">
+                            <label for="Nome">Nome</label>
+                            <input name="Nome" class="form-control" value="@Reserva.Id" required />
+                        </div>
+                        <div class="form-group mb-3">
+                            <label for="Email">Email</label>
+                            <input name="Email"  class="form-control" value="@Reserva.Id" required />
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-success">Salvar Alterações</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+}
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

@@ -1,6 +1,9 @@
 ﻿using FSBR_AgendaSalas.Application.Interfaces;
 using FSBR_AgendaSalas.API.DTOs.Reserva;
 using Microsoft.AspNetCore.Mvc;
+using FSBR_AgendaSalas.API.DTOs.Sala;
+using FSBR_AgendaSalas.Domain.Entities;
+using FSBR_AgendaSalas.Application.Services;
 
 namespace FSBR_AgendaSalas.API.Controllers
 {
@@ -62,5 +65,17 @@ namespace FSBR_AgendaSalas.API.Controllers
             await _reservaService.CancelarReservaAsync(id);
             return NoContent();
         }
+
+
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<ReservaDTO>>> Get()
+        {
+            var reservas = await _reservaService.ObterTodasAsync();
+            if (reservas == null) return NotFound();
+            return Ok(reservas.Select(s => new ReservaDTO{ Id = s.Id,SalaId = s.SalaId,UsuarioId = s.UsuarioId, DataHoraReserva = s.DataHoraReserva}));          
+        }
+
+       
+     
     }
 }

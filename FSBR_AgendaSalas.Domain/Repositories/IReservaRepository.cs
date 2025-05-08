@@ -6,6 +6,7 @@ namespace FSBR_AgendaSalas.Domain.Repositories
     {
         Task<Reserva?> ObterPorIdAsync(Guid id);
         Task<List<Reserva>> ObterReservaPorSalaAsync(Guid salaId, DateTime data);
+        Task<List<Reserva>> ObterTodasAsync();
         Task AdicionarAsync(Reserva reserva);
         Task AtualizarAsync(Reserva reserva);
         Task DeletarAsync(Guid id);

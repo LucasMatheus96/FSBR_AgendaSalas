@@ -52,5 +52,11 @@ namespace FSBR_AgendaSalas.Infrastructure.Repositories
                 await _context.SaveChangesAsync();
             }
         }
+
+        public async Task<List<Reserva>> ObterTodasAsync()
+        {
+            return await _context.Reservas.ToListAsync();
+        }
+
     }
 }

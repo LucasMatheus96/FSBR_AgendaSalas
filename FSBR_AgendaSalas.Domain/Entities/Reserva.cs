@@ -23,6 +23,7 @@ namespace FSBR_AgendaSalas.Domain.Entities
         public Sala Sala { get; private set; }
         public Usuario Usuario { get; private set; }
 
+      
 
         public Reserva(Guid salaId, Guid usuarioId, DateTime dataHoraReserva)
         {
@@ -33,7 +34,16 @@ namespace FSBR_AgendaSalas.Domain.Entities
             Status = StatusReserva.Confirmada; 
         }
 
-       
+        public Reserva(Guid id, Guid salaId, Guid usuarioId, DateTime dataHoraReserva)
+        {
+            Id = id;
+            SalaId = salaId;
+            UsuarioId = usuarioId;
+            DataHoraReserva = dataHoraReserva;
+            Status = StatusReserva.Confirmada;
+        }
+
+
         public void CancelarReserva()
         {
             if (DataHoraReserva < DateTime.Now.AddHours(24))

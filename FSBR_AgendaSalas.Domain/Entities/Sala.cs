@@ -21,5 +21,12 @@ namespace FSBR_AgendaSalas.Domain.Entities
             Nome = nome;
             Capacidade = capacidade;
         }
+
+        public Sala(Guid id,string nome, int capacidade)
+        {
+            Id = id;
+            Nome = nome;
+            Capacidade = capacidade;
+        }
     }
 }

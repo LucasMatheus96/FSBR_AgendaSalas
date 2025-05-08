@@ -10,10 +10,17 @@ namespace FSBR_AgendaSalas.Domain.Entities
 
         public ICollection<Reserva> Reservas { get; private set; } = new List<Reserva>();
 
-        // Constructor
         public Usuario(string nome, string email)
         {
             Id = Guid.NewGuid();
+            Nome = nome;
+            Email = email;
+
+        }
+
+        public Usuario(Guid id,string nome, string email)
+        {
+            Id = id;
             Nome = nome;
             Email = email;
 

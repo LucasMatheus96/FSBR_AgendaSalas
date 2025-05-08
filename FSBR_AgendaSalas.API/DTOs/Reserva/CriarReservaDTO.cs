@@ -5,5 +5,7 @@
         public Guid SalaId { get; set; }
         public Guid UsuarioId { get; set; }
         public DateTime DataHoraReserva { get; set; }
+
+        public string EmailUsuario { get; set; }
     }
 }

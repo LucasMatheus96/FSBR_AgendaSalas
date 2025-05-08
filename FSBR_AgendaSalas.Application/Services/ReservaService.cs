@@ -9,15 +9,17 @@ namespace FSBR_AgendaSalas.Application.Services
         private readonly IReservaRepository _reservaRepository;
         private readonly ISalaRepository _salaRepository;
         private readonly IUsuarioRepository _usuarioRepository;
+        private readonly IEmailService _emailService;
 
-        public ReservaService(IReservaRepository reservaRepository, ISalaRepository salaRepository, IUsuarioRepository usuarioRepository)
+        public ReservaService(IReservaRepository reservaRepository, ISalaRepository salaRepository, IUsuarioRepository usuarioRepository, IEmailService emailService)
         {
             _reservaRepository = reservaRepository;
             _salaRepository = salaRepository;
             _usuarioRepository = usuarioRepository;
+            _emailService = emailService;
         }
 
-        public async Task CriarReservaAsync(Guid salaId, Guid usuarioId, DateTime dataHora)
+        public async Task CriarReservaAsync(Guid salaId, Guid usuarioId, DateTime dataHora, string emailUsuario)
         {
             var sala = await _salaRepository.ObterPorIdAsync(salaId);
             var usuario = await _usuarioRepository.ObterPorIdAsync(usuarioId);
@@ -32,7 +34,8 @@ namespace FSBR_AgendaSalas.Application.Services
 
             var reserva = new Reserva(salaId, usuarioId, dataHora);
             await _reservaRepository.AdicionarAsync(reserva);
-            
+            await _emailService.EnviarEmailAsync(emailUsuario, "Reserva confirmada", "<h1>Sua reserva foi confirmada!</h1>");
+
         }
 
         public async Task CancelarReservaAsync(Guid reservaId)

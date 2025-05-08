@@ -18,7 +18,7 @@ namespace FSBR_AgendaSalas.API.Controllers
         [HttpPost]
         public async Task<IActionResult> Criar([FromBody] CriarReservaDTO dto)
         {
-            await _reservaService.CriarReservaAsync(dto.SalaId, dto.UsuarioId, dto.DataHoraReserva);
+            await _reservaService.CriarReservaAsync(dto.SalaId, dto.UsuarioId, dto.DataHoraReserva,dto.EmailUsuario);
             return Ok();
         }
 

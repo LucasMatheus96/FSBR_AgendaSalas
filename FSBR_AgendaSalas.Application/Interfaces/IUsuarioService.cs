@@ -11,6 +11,6 @@ namespace FSBR_AgendaSalas.Application.Interfaces
         Task<List<Usuario>> ObterTodosAsync();
         Task AdicionarAsync(Usuario usuario);
         Task AtualizarAsync(Usuario usuario);
-        Task DeletarAsync(Guid id);
+        Task DeleteAsync(Guid id);
     }
 }

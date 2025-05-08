@@ -13,6 +13,6 @@ namespace FSBR_AgendaSalas.Domain.Repositories
         Task<List<Usuario>> ObterTodosAsync();
         Task AdicionarAsync(Usuario usuario);
         Task AtualizarAsync(Usuario usuario);
-        Task DeletarAsync(Guid id);
+        Task DeleteAsync(Guid id);
     }
 }

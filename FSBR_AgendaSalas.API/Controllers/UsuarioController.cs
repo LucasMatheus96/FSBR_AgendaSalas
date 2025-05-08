@@ -18,7 +18,7 @@ public class UsuarioController : ControllerBase
     public async Task<ActionResult<IEnumerable<UsuarioDto>>> Get()
     {
         var usuarios = await _usuarioService.ObterTodosAsync();
-        return Ok(usuarios.Select(u => new UsuarioDto { Id = u.Id, Nome = u.Nome }));
+        return Ok(usuarios.Select(u => new UsuarioDto { Id = u.Id, Nome = u.Nome , Email = u.Email}));
     }
 
     [HttpGet("{id}")]
@@ -52,7 +52,7 @@ public class UsuarioController : ControllerBase
     [HttpDelete("{id}")]
     public async Task<ActionResult> Delete(Guid id)
     {
-        await _usuarioService.DeletarAsync(id);
+        await _usuarioService.DeleteAsync(id);
         return NoContent();
     }
 }

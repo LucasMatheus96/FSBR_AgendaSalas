@@ -47,7 +47,7 @@ namespace FSBR_AgendaSalas.Application.Services
             await _usuarioRepository.AtualizarAsync(usuario);
         }
 
-        public async Task DeletarAsync(Guid id)
+        public async Task DeleteAsync(Guid id)
         {
             var usuarioExistente = await _usuarioRepository.ObterPorIdAsync(id);
             if (usuarioExistente == null)
@@ -56,7 +56,7 @@ namespace FSBR_AgendaSalas.Application.Services
             }
 
             // Caso necessário, verifique se o usuário está associado a alguma reserva ou outro processo antes de excluir.
-            await _usuarioRepository.DeletarAsync(id);
+            await _usuarioRepository.DeleteAsync(id);
         }
     }
 }

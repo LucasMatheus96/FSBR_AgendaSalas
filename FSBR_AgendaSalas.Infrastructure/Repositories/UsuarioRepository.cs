@@ -36,7 +36,7 @@ namespace FSBR_AgendaSalas.Infrastructure.Repositories
             await _context.SaveChangesAsync();
         }
 
-        public async Task DeletarAsync(Guid id)
+        public async Task DeleteAsync(Guid id)
         {
             var Usuario = await _context.Usuarios.FindAsync(id);
             if (Usuario != null)

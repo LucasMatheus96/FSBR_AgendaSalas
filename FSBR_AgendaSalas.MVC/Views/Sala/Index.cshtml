@@ -1,0 +1,30 @@
+﻿@model IEnumerable<FSBR_AgendaSalas.MVC.ViewModels.SalaViewModel>
+
+@{
+    ViewData["Title"] = "Lista de Salas";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Nome</th>
+            <th>Capacidade</th>
+            <th>Ações</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var sala in Model)
+        {
+            <tr>
+                <td>@sala.Nome</td>
+                <td>@sala.Capacidade</td>
+                <td>
+                    <!-- Ações para editar ou reservar, etc -->
+                    <a href="/sala/Detalhes/@sala.Id">Detalhes</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

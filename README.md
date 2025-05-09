@@ -1,201 +1,159 @@
-Sistema de Controle de Reservas de Salas - FSBR_AgendaSalas
-Descrição do Projeto
-O FSBR_AgendaSalas é um sistema completo para controle de reservas de salas de reunião. Ele é composto por dois componentes principais: uma API Web e um Frontend MVC. O sistema é construído utilizando ASP.NET Core, Entity Framework Core, e Docker para containerização. A aplicação permite que os usuários façam reservas de salas, com validação de disponibilidade, envio de e-mails de confirmação, e manipulação de cancelamentos. O sistema também inclui funcionalidades de gestão de usuários e salas.
+# FSBR Agenda de Salas
 
-Funcionalidades
-Gerenciamento de Salas: Cadastrar, listar e editar salas disponíveis.
+Projeto completo de **controle de reservas de salas** utilizando **ASP.NET Core Web API**, **MVC (Razor)**, **Entity Framework Core** e **Clean Architecture**. O sistema permite o gerenciamento de usuários, salas e reservas, com regras de negócio como prevenção de conflitos de horário e envio de e-mails de confirmação.
 
-Gestão de Reservas: Criar, editar, visualizar e cancelar reservas de salas.
+---
 
-Envio de E-mails: Envio automático de e-mails para confirmação de reservas.
+## 📁 Estrutura do Projeto
 
-Validação de Conflitos de Horários: Impede reservas em horários já ocupados.
+### 📦 Projeto `FSBR_AgendaSalas.API`
 
-Restrição de Cancelamento: Restrições baseadas no tempo restante para o evento.
+> Responsável por expor a Web API.
 
-Autenticação de Usuários: Controle de acesso através de autenticação no sistema.
+```
+FSBR_AgendaSalas.API
+│
+├── Properties
+├── Controllers
+│   ├── ReservaController.cs
+│   ├── SalaController.cs
+│   └── UsuarioController.cs
+├── DTOs
+└── Program.cs
+```
 
-Tecnologias Utilizadas
-ASP.NET Core: Framework utilizado para o desenvolvimento da API e frontend MVC.
+### 📦 Projeto `FSBR_AgendaSalas.Application`
 
-Entity Framework Core: ORM utilizado para interação com o banco de dados.
+> Contém as regras de negócio e os serviços da aplicação.
 
-SQL Server: Banco de dados utilizado para armazenar informações de reservas, salas e usuários.
+```
+FSBR_AgendaSalas.Application
+│
+├── Configuration
+├── DTOs
+├── Interfaces
+├── Services
+└── Utils
+```
 
-Docker: Containerização da aplicação para facilitar a implantação e execução em diferentes ambientes.
+### 📦 Projeto `FSBR_AgendaSalas.Domain`
 
-SMTP (SendGrid ou outro): Para o envio de e-mails de confirmação de reservas.
+> Define as entidades, contratos de repositórios e serviços, além das regras compartilhadas.
 
-Estrutura do Projeto
-O sistema é composto por três principais partes:
+```
+FSBR_AgendaSalas.Domain
+│
+├── Entities
+├── Repositories
+├── Services
+└── Shared
+```
 
-FSBR_AgendaSalas.API - API Backend para gerenciamento das reservas, usuários e salas.
+### 📦 Projeto `FSBR_AgendaSalas.Infrastructure`
 
-FSBR_AgendaSalas.MVC - Frontend baseado em ASP.NET Core MVC com Razor Views para interação com o usuário.
+> Responsável pelo acesso ao banco de dados e persistência dos dados.
 
-Banco de Dados (SQL Server) - Armazena dados relacionados a usuários, salas e reservas.
+```
+FSBR_AgendaSalas.Infrastructure
+│
+├── DTOs
+├── Migrations
+├── Persistence
+├── Repositories
+└── Services
+```
 
-Pré-Requisitos
-Antes de rodar o projeto, é necessário ter as seguintes ferramentas instaladas:
+### 📦 Projeto `FSBR_AgendaSalas.MVC`
 
-Docker: Para rodar a aplicação em containers.
+> Interface web da aplicação utilizando ASP.NET Core MVC com Razor Views.
 
-.NET 8.0 SDK: Para compilar e rodar a aplicação localmente.
+```
+FSBR_AgendaSalas.MVC
+│
+├── Properties
+├── Controllers
+├── Models
+├── ViewModels
+└── Views
+```
 
-Visual Studio ou VS Code: IDE recomendada para desenvolvimento.
+---
 
-SQL Server: Para rodar o banco de dados localmente ou na nuvem.
+## 🔌 Endpoints da API
 
-SMTP (opcional): Para configuração de envio de e-mails de confirmação.
+### 🗓️ Reservas
 
-Instalação e Execução
-Passo 1: Clonando o Repositório
-Clone o repositório para o seu ambiente local:
+- `GET /api/Reserva` — Listar todas as reservas  
+- `GET /api/Reserva/{id}` — Obter detalhes de uma reserva  
+- `POST /api/Reserva` — Criar uma nova reserva  
+- `PUT /api/Reserva/{id}` — Atualizar uma reserva existente  
+- `DELETE /api/Reserva/{id}` — Cancelar uma reserva  
 
-bash
-Copiar
-Editar
-git clone https://github.com/seu-usuario/FSBR_AgendaSalas.git
-cd FSBR_AgendaSalas
-Passo 2: Configuração do Docker
-Dockerfile para a API (Backend)
+### 🏢 Salas
 
-O Dockerfile da API está localizado em FSBR_AgendaSalas.API/Dockerfile. Ele é responsável por compilar a aplicação backend e gerar a imagem do Docker.
+- `GET /api/Sala` — Listar todas as salas  
+- `GET /api/Sala/{id}` — Obter detalhes de uma sala  
+- `POST /api/Sala` — Cadastrar uma nova sala  
+- `PUT /api/Sala/{id}` — Atualizar uma sala existente  
+- `DELETE /api/Sala/{id}` — Remover uma sala  
 
-dockerfile
-Copiar
-Editar
-# Usar a imagem base do .NET
-FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS base
-WORKDIR /app
-EXPOSE 80
+### 👤 Usuários
 
-# Usar a imagem do SDK do .NET para build
-FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
-WORKDIR /src
-COPY ["FSBR_AgendaSalas.API/FSBR_AgendaSalas.API.csproj", "FSBR_AgendaSalas.API/"]
-RUN dotnet restore "FSBR_AgendaSalas.API/FSBR_AgendaSalas.API.csproj"
-COPY . .
-WORKDIR "/src/FSBR_AgendaSalas.API"
-RUN dotnet build "FSBR_AgendaSalas.API.csproj" -c Release -o /app/build
+- `GET /api/Usuario` — Listar todos os usuários  
+- `GET /api/Usuario/{id}` — Obter detalhes de um usuário  
+- `POST /api/Usuario` — Cadastrar um novo usuário  
+- `PUT /api/Usuario/{id}` — Atualizar um usuário existente  
+- `DELETE /api/Usuario/{id}` — Remover um usuário  
 
-# Publicar a aplicação
-FROM build AS publish
-RUN dotnet publish "FSBR_AgendaSalas.API.csproj" -c Release -o /app/publish
+---
 
-# Gerar a imagem final
-FROM base AS final
-WORKDIR /app
-COPY --from=publish /app/publish .
-ENTRYPOINT ["dotnet", "FSBR_AgendaSalas.API.dll"]
-Dockerfile para o MVC (Frontend)
+## ⚙️ Funcionalidades
 
-O Dockerfile do frontend está localizado em FSBR_AgendaSalas.MVC/Dockerfile.
+- CRUD completo de Reservas, Salas e Usuários  
+- Validação de conflitos de horário em reservas  
+- Envio de e-mail de confirmação de reserva  
+- Separação em camadas seguindo o padrão Clean Architecture  
+- Repositórios com Entity Framework Core  
+- Validações centralizadas e tratativas de erro  
 
-dockerfile
-Copiar
-Editar
-# Usar a imagem base do .NET (ASP.NET Core 8.0)
-FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS base
-WORKDIR /app
-EXPOSE 80
+---
 
-# Usar a imagem do SDK do .NET para build
-FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
-WORKDIR /src
-COPY ["FSBR_AgendaSalas.MVC/FSBR_AgendaSalas.MVC.csproj", "FSBR_AgendaSalas.MVC/"]
-RUN dotnet restore "FSBR_AgendaSalas.MVC/FSBR_AgendaSalas.MVC.csproj"
-COPY . .
-WORKDIR "/src/FSBR_AgendaSalas.MVC"
-RUN dotnet build "FSBR_AgendaSalas.MVC.csproj" -c Release -o /app/build
+## 🚀 Como Executar
 
-# Publicar a aplicação
-FROM build AS publish
-RUN dotnet publish "FSBR_AgendaSalas.MVC.csproj" -c Release -o /app/publish
+1. **Restore dos pacotes:**
 
-# Gerar a imagem final
-FROM base AS final
-WORKDIR /app
-COPY --from=publish /app/publish .
-ENTRYPOINT ["dotnet", "FSBR_AgendaSalas.MVC.dll"]
-Docker Compose (orquestração dos containers)
+```bash
+dotnet restore
+```
 
-Crie o arquivo docker-compose.yml para orquestrar o ambiente com os containers da API, MVC e banco de dados:
+2. **Aplicar Migrations e atualizar o banco:**
 
-yaml
-Copiar
-Editar
-version: '3.4'
+```bash
+dotnet ef migrations add InitialCreate -p FSBR_AgendaSalas.Infrastructure -s FSBR_AgendaSalas.API
+dotnet ef database update -p FSBR_AgendaSalas.Infrastructure -s FSBR_AgendaSalas.API
+```
 
-services:
-  webapi:
-    image: fsbr_agendasalas_api
-    build:
-      context: .
-      dockerfile: FSBR_AgendaSalas.API/Dockerfile
-    ports:
-      - "5000:80"
-    depends_on:
-      - sqlserver
-    environment:
-      - ASPNETCORE_ENVIRONMENT=Production
-      - ConnectionStrings__DefaultConnection=Server=sqlserver;Database=AgendaSalas;User=sa;Password=Password@1234
+3. **Rodar o projeto:**
 
-  mvc:
-    image: fsbr_agendasalas_mvc
-    build:
-      context: .
-      dockerfile: FSBR_AgendaSalas.MVC/Dockerfile
-    ports:
-      - "5001:80"
-    depends_on:
-      - webapi
+Execute os projetos `FSBR_AgendaSalas.API` e `FSBR_AgendaSalas.MVC`.
 
-  sqlserver:
-    image: mcr.microsoft.com/mssql/server:2022-latest
-    environment:
-      - SA_PASSWORD=Password@1234
-      - ACCEPT_EULA=Y
-    ports:
-      - "1433:1433"
-    networks:
-      - default
-Passo 3: Executando a Aplicação com Docker
-Execute o comando abaixo para buildar e subir os containers:
+---
 
-bash
-Copiar
-Editar
-docker-compose up --build
-Isso criará e iniciará:
+## 🛠️ Tecnologias Utilizadas
 
-O container da API na porta 5000.
+- .NET 8
+- ASP.NET Core Web API
+- ASP.NET Core MVC (Razor)
+- Entity Framework Core
+- SQL Server
+- AutoMapper
+- FluentValidation
+- Clean Architecture
+- Injeção de Dependência
+- Swagger (Swashbuckle)
 
-O container do MVC na porta 5001.
+---
 
-O SQL Server na porta 1433.
+## 📄 Licença
 
-Passo 4: Acessando a Aplicação
-Frontend (MVC): Acesse a aplicação no seu navegador através de http://localhost:5001.
-
-API (Backend): A API estará disponível em http://localhost:5000.
-
-Considerações Finais
-Este sistema foi desenvolvido para ser fácil de implantar e escalável. Utilizando Docker para containerização, você pode facilmente replicar o ambiente de produção localmente. O uso de ASP.NET Core MVC no frontend e Web API no backend segue as melhores práticas de desenvolvimento, garantindo performance e flexibilidade.
-
-Contribuições
-Se você deseja contribuir com melhorias ou novas funcionalidades para este projeto, siga as etapas abaixo:
-
-Faça um fork deste repositório.
-
-Crie uma branch com sua feature (git checkout -b feature/nome-da-feature).
-
-Faça as modificações desejadas e crie um commit (git commit -m 'Adiciona nova funcionalidade').
-
-Push para a branch (git push origin feature/nome-da-feature).
-
-Abra um pull request.
-
-Licença
-Este projeto está licenciado sob a MIT License - consulte o arquivo LICENSE para mais informações.
-
+Este projeto está licenciado sob a licença MIT. Veja o arquivo [LICENSE](LICENSE) para mais detalhes.

@@ -5,6 +5,14 @@
     var novaReserva = new FSBR_AgendaSalas.MVC.ViewModels.ReservaViewModel();
 }
 
+@if (TempData["Mensagem"] != null)
+{
+    <script>
+        alert('@TempData["Mensagem"]');
+    </script>
+}
+}
+
 <h1>@ViewData["Title"]</h1>
 
 <div class="d-flex  mb-3">
@@ -19,10 +27,12 @@
 <table class="table">
     <thead>
         <tr>
-            <th>Nome</th>
-            <th>Reserva</th>
-            <th>Sala</th>
-            <th>Horário agendado</th>
+            <th>ID</th>
+            <th>Nome da Sala</th>
+            <th>Status</th>
+            <th>Nome do Usuario</th>          
+            <th>Inicio da Reserva</th>
+            <th>Fim da Reserva</th>
             <th>Ações</th>
         </tr>
     </thead>
@@ -31,16 +41,26 @@
         {
             <tr>
                 <td>@reserva.Id</td>
-                <td>@reserva.EmailUsuario</td>
+                <td>@reserva.NomeSala</td>
+                <td>@reserva.Status</td>
+                <td>@reserva.NomeUsuario</td>
+                <td>@reserva.DataHoraReserva.ToString("dd/MM/yyyy HH:mm")</td>
+                <td>@reserva.DataHoraFimReserva.ToString("dd/MM/yyyy HH:mm")</td>
                 <td>
-                    <!-- Botão para abrir o modal de edição -->
                     <button type="button" class="btn btn-sm btn-warning me-2"
                             data-bs-toggle="modal"
                             data-bs-target="#modalEditarReserva_@reserva.Id">
                         Alterar
                     </button>
+                    <form asp-action="Cancelar" asp-controller="Reserva" method="post" style="display:inline;"
+                          onsubmit="return confirm('Tem certeza que deseja cancelar esta reserva?');">
+                        <input type="hidden" name="id" value="@reserva.Id" />
+                        <button type="submit" class="btn btn-sm btn-secondary me-2"
+                        @(reserva.Status == "Cancelada" ? "disabled" : "")>
+                            Cancelar
+                        </button>
+                    </form>
 
-                    <!-- Botão de exclusão -->
                     <form asp-action="Delete" asp-controller="reserva" method="post" style="display:inline;"
                           onsubmit="return confirm('Tem certeza que deseja excluir esta Reserva?');">
                         <input type="hidden" name="id" value="@reserva.Id" />
@@ -61,17 +81,33 @@
                     <h5 class="modal-title" id="modalCadastroReservaLabel">Cadastrar Nova Reserva</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
                 </div>
-                <div class="modal-body">
+                <div class="modal-body">              
                     <div class="form-group mb-3">
-                        <label asp-for="@novaReserva.Id" class="form-label"></label>
-                        <input asp-for="@novaReserva.SalaId" name="Nome" class="form-control" />
-                        <span asp-validation-for="@novaReserva.SalaId" class="text-danger"></span>
+                        <label for="UsuarioId" class="form-label">Selecione o Usuário</label>
+                        <select id="UsuarioId" name="UsuarioId" class="form-select" required>
+                            <option value="">Carregando...</option>
+                        </select>
                     </div>
+
                     <div class="form-group mb-3">
-                        <label asp-for="@novaReserva.Id" class="form-label"></label>
-                        <input asp-for="@novaReserva.Id" name="Email" class="form-control" />
-                        <span asp-validation-for="@novaReserva.Id" class="text-danger"></span>
+                        <label for="SalaId" class="form-label">Selecione a Sala</label>
+                        <select id="SalaId" name="SalaId" class="form-select" required>
+                            <option value="">Carregando...</option>
+                        </select>
                     </div>
+
+                    <div class="form-group mb-3">
+                        <label for="DataHoraReserva" class="form-label">Data e Hora inicio da Reserva</label>
+                        <input type="datetime-local" class="form-control" id="DataHoraReserva" name="DataHoraReserva" required />
+                    </div>
+
+                    <div class="form-group mb-3">
+                        <label for="DataHoraFimReserva" class="form-label">Data e Hora final da Reserva</label>
+                        <input type="datetime-local" class="form-control" id="DataHoraFimReserva" name="DataHoraFimReserva" required />
+                    </div>
+
+                 
+
                 </div>
                 <div class="modal-footer">
                     <button type="submit" class="btn btn-success">Salvar</button>
@@ -94,13 +130,34 @@
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
                     </div>
                     <div class="modal-body">
-                        <div class="form-group mb-3">
-                            <label for="Nome">Nome</label>
-                            <input name="Nome" class="form-control" value="@Reserva.Id" required />
-                        </div>
-                        <div class="form-group mb-3">
-                            <label for="Email">Email</label>
-                            <input name="Email"  class="form-control" value="@Reserva.Id" required />
+                        <div class="modal-body">
+                            <div class="form-group mb-3">
+                                <label for="UsuarioId">Usuário</label>
+                                <select id="UsuarioId_@Reserva.Id" name="UsuarioId" class="form-select" required>
+                                    <input type="hidden" id="UsuarioSelecionado_@Reserva.Id" value="@Reserva.UsuarioId" />
+                                </select>
+
+                            </div>
+
+                            <div class="form-group mb-3">
+                                <label for="SalaId">Sala</label>
+                                <select id="SalaId_@Reserva.Id" name="SalaId" class="form-select" required>
+                                    
+                                    <input type="hidden" id="SalaSelecionada_@Reserva.Id" value="@Reserva.SalaId" />
+                                </select>
+                            </div>
+
+                            <div class="form-group mb-3">
+                                <label for="DataHoraReserva">Início</label>
+                                <input type="datetime-local" name="DataHoraReserva" class="form-control"
+                                       value="@Reserva.DataHoraReserva.ToString("yyyy-MM-ddTHH:mm")" required />
+                            </div>
+
+                            <div class="form-group mb-3">
+                                <label for="DataHoraFimReserva">Fim</label>
+                                <input type="datetime-local" name="DataHoraFimReserva" class="form-control"
+                                       value="@Reserva.DataHoraFimReserva.ToString("yyyy-MM-ddTHH:mm")" required />
+                            </div>
                         </div>
                     </div>
                     <div class="modal-footer">
@@ -113,6 +170,47 @@
     </div>
 }
 
+
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
+    <script>
+        // Modal de cadastro
+        $('#modalCadastroReserva').on('shown.bs.modal', function () {
+            carregarUsuariosESalas('#UsuarioId', '#SalaId');
+        });
+
+        // Modais de edição
+        $('[id^=modalEditarReserva_]').on('shown.bs.modal', function () {
+            const reservaId = $(this).attr('id').split('_')[1];
+            const usuarioSelector = `#UsuarioId_${reservaId}`;
+            const salaSelector = `#SalaId_${reservaId}`;
+            const usuarioSelecionado = $(`#UsuarioSelecionado_${reservaId}`).val();
+            const salaSelecionada = $(`#SalaSelecionada_${reservaId}`).val();
+
+            carregarUsuariosESalas(usuarioSelector, salaSelector, usuarioSelecionado, salaSelecionada);
+        });
+
+        function carregarUsuariosESalas(usuarioSelector, salaSelector, usuarioSelecionado = null, salaSelecionada = null) {
+            // Carrega salas
+            $.get('@Url.Action("GetSalas", "Reserva")', function (salas) {
+                const selectSala = $(salaSelector);
+                selectSala.empty().append('<option value="">Selecione</option>');
+                salas.forEach(function (sala) {
+                    const selected = (sala.id == salaSelecionada) ? 'selected' : '';
+                    selectSala.append(`<option value="${sala.id}" ${selected}>${sala.nome}</option>`);
+                });
+            });
+
+            // Carrega usuários
+            $.get('@Url.Action("GetUsuarios", "Reserva")', function (usuarios) {
+                const selectUsuario = $(usuarioSelector);
+                selectUsuario.empty().append('<option value="">Selecione</option>');
+                usuarios.forEach(function (usuario) {
+                    const selected = (usuario.id == usuarioSelecionado) ? 'selected' : '';
+                    selectUsuario.append(`<option value="${usuario.id}" ${selected}>${usuario.nome}</option>`);
+                });
+            });
+        }
+    </script>
 }
+

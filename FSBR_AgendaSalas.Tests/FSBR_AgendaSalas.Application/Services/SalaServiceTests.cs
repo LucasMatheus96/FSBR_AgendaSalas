@@ -21,7 +21,7 @@ public class SalaServiceTests
     public async Task ObterPorIdAsync_DeveRetornarSala()
     {
         // Arrange
-        var salaId = Guid.NewGuid();
+        var salaId = 1;
         var salaNome = "Sala Reunião";
         var Capacidade = 10;
         var sala = new Sala(salaId,salaNome, Capacidade);

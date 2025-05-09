@@ -16,13 +16,20 @@ namespace FSBR_AgendaSalas.API.Controllers
         public ReservaController(IReservaService reservaService)
         {
             _reservaService = reservaService;
-        }
+        }        
 
         [HttpPost]
-        public async Task<IActionResult> Criar([FromBody] CriarReservaDTO dto)
+        public async Task<IActionResult> Post([FromBody] CriarReservaDTO dto)
         {
-            await _reservaService.CriarReservaAsync(dto.Id,dto.SalaId, dto.UsuarioId, dto.DataHoraReserva,dto.EmailUsuario);
-            return Ok();
+            var resultado = await _reservaService.CriarReservaAsync(dto.Id, dto.SalaId, dto.UsuarioId, dto.DataHoraReserva, dto.DataHoraFimReserva, dto.EmailUsuario);
+
+            if (resultado.Sucesso)
+            {
+                return Ok(new { mensagem = resultado.Mensagem });
+
+            }
+
+            return BadRequest(new { erro = resultado.Mensagem });
         }
 
         [HttpDelete("{id}")]
@@ -59,7 +66,7 @@ namespace FSBR_AgendaSalas.API.Controllers
             }));
         }
 
-        [HttpPut("cancelar/{id}")]
+        [HttpPost("cancelar/{id}")]
         public async Task<IActionResult> Cancelar(int id)
         {
             await _reservaService.CancelarReservaAsync(id);
@@ -72,10 +79,44 @@ namespace FSBR_AgendaSalas.API.Controllers
         {
             var reservas = await _reservaService.ObterTodasAsync();
             if (reservas == null) return NotFound();
-            return Ok(reservas.Select(s => new ReservaDTO{ Id = s.Id,SalaId = s.SalaId,UsuarioId = s.UsuarioId, DataHoraReserva = s.DataHoraReserva}));          
+            return Ok(reservas.Select(s => new ReservaDTO
+            {
+                Id = s.Id,
+                SalaId = s.SalaId,
+                UsuarioId = s.UsuarioId,
+                DataHoraReserva = s.DataHoraReserva,
+                DataHoraFimReserva = s.DataHoraFimReserva,
+                EmailUsuario = s.Usuario.Email,
+                NomeSala = s.Sala.Nome,
+                NomeUsuario = s.Usuario.Nome,
+                Status = s.Status.ToString()
+            }));
         }
 
-       
-     
+        [HttpPut("{id}")]
+        public async Task<ActionResult> Put(int id, [FromBody] CriarReservaDTO dto)
+        {
+            var reserva = await _reservaService.ObterPorIdAsync(id);
+            if (reserva == null) return NotFound();
+
+            reserva.SalaId = dto.SalaId;
+            reserva.DataHoraReserva = dto.DataHoraReserva;
+            reserva.DataHoraFimReserva = dto.DataHoraFimReserva;
+            reserva.UsuarioId = dto.UsuarioId;          
+                
+
+            var resultado = await _reservaService.AtualizarAsync(reserva);
+
+            if (resultado.Sucesso)
+            {
+                return Ok(new { mensagem = resultado.Mensagem });
+
+            }
+
+            return BadRequest(new { erro = resultado.Mensagem });
+        }
+
+
+
     }
 }

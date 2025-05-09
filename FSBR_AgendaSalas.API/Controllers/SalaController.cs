@@ -44,7 +44,8 @@ public class SalaController : ControllerBase
         var sala = await _salaService.ObterPorIdAsync(id);
         if (sala == null) return NotFound();
 
-        sala.Nome = dto.Nome; 
+        sala.Nome = dto.Nome;
+        sala.Capacidade = dto.Capacidade;
         await _salaService.AtualizarAsync(sala);
         return NoContent();
     }

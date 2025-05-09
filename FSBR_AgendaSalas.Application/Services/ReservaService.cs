@@ -1,6 +1,7 @@
 ﻿using FSBR_AgendaSalas.Application.Interfaces;
 using FSBR_AgendaSalas.Domain.Entities;
 using FSBR_AgendaSalas.Domain.Repositories;
+using FSBR_AgendaSalas.Domain.Shared;
 
 namespace FSBR_AgendaSalas.Application.Services
 {
@@ -19,22 +20,38 @@ namespace FSBR_AgendaSalas.Application.Services
             _emailService = emailService;
         }
 
-        public async Task CriarReservaAsync(int id ,int salaId, int usuarioId, DateTime dataHora, string emailUsuario)
+        public async Task<Resultado> CriarReservaAsync(int id ,int salaId, int usuarioId, DateTime dataHora, DateTime dataHoraFinal, string emailUsuario)
         {
-            var sala = await _salaRepository.ObterPorIdAsync(salaId);
-            var usuario = await _usuarioRepository.ObterPorIdAsync(usuarioId);
+            try
+            {
+                var sala = await _salaRepository.ObterPorIdAsync(salaId);
+                var usuario = await _usuarioRepository.ObterPorIdAsync(usuarioId);
 
-            if (sala == null) throw new Exception("Sala não encontrada.");
-            if (usuario == null) throw new Exception("Usuário não encontrado.");
+                if (sala == null) return Resultado.Falha("Sala não encontrada.");
+                if (usuario == null) return Resultado.Falha("Usuário não encontrado.");
 
-            // Verificar se já existe reserva para essa sala no mesmo horário
-            var reservas = await _reservaRepository.ObterReservaPorSalaAsync(salaId, dataHora.Date);
-            if (reservas.Any(r => r.DataHoraReserva == dataHora))
-                throw new Exception("Já existe uma reserva para esta sala neste horário.");
+                // Verificar se já existe reserva para essa sala no mesmo horário
+                var reservas = await _reservaRepository.ObterReservaPorSalaAsync(salaId, dataHora, dataHoraFinal);
+                if (reservas.Any())return Resultado.Falha("Já existe uma reserva para esta sala neste horário.");
 
-            var reserva = new Reserva(id,salaId, usuarioId, dataHora);
-            await _reservaRepository.AdicionarAsync(reserva);
-            await _emailService.EnviarEmailAsync(emailUsuario, "Reserva confirmada", "<h1>Sua reserva foi confirmada!</h1>");
+                var reserva = new Reserva(id, salaId, usuarioId, dataHora, dataHoraFinal);
+                await _reservaRepository.AdicionarAsync(reserva);
+                try
+                {
+                    await _emailService.EnviarEmailAsync(emailUsuario, "Reserva confirmada", "<h1>Sua reserva foi confirmada!</h1>");
+                }
+                catch
+                {
+                    //Apenas para não parar a aplicação na tentativa do envio pois os dados não estão configurados
+                }
+
+                return Resultado.Ok("Reserva criada com sucesso");
+            }
+            catch (Exception e)
+            {
+                return Resultado.Falha("Erro inesperado ao criar a reserva:" + e.Message);
+            }
+            
 
         }
 
@@ -42,7 +59,7 @@ namespace FSBR_AgendaSalas.Application.Services
         {
             var reserva = await _reservaRepository.ObterPorIdAsync(reservaId);
             if (reserva == null) throw new Exception("Reserva não encontrada.");
-
+            
             reserva.CancelarReserva();
             await _reservaRepository.AtualizarAsync(reserva);
         }
@@ -71,6 +88,24 @@ namespace FSBR_AgendaSalas.Application.Services
         public async Task<List<Reserva>> ObterTodasAsync()
         {
             return await _reservaRepository.ObterTodasAsync();
+        }
+
+        public async Task<Resultado> AtualizarAsync(Reserva reserva)
+        {
+            var reservaExistente = await _reservaRepository.ObterPorIdAsync(reserva.Id);
+            if (reservaExistente == null)
+            {
+                return Resultado.Falha("Reserva não encontrada para atualização.");
+            }
+
+            if(reserva.DataHoraFimReserva != reservaExistente.DataHoraFimReserva || reserva.DataHoraReserva != reservaExistente.DataHoraReserva)
+            {
+                var reservas = await _reservaRepository.ObterReservaPorSalaAsync(reservaExistente.SalaId, reservaExistente.DataHoraReserva, reservaExistente.DataHoraFimReserva);
+                if (reservas.Any()) return Resultado.Falha("Já existe uma reserva para esta sala neste horário.");
+            }           
+            await _reservaRepository.AtualizarAsync(reserva);
+
+            return Resultado.Ok("Reserva criada com sucesso");
         }
 
 

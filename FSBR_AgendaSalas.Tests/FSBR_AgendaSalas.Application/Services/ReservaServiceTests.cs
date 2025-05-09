@@ -34,12 +34,14 @@ public class ReservaServiceTests
     public async Task ObterPorIdAsync_DeveRetornarReserva_QuandoExiste()
     {
         // Arrange
-        var reservaId = Guid.NewGuid();
-        var usuarioId = Guid.NewGuid();
-        var salaId = Guid.NewGuid();
+        var id = 1
+        var reservaId = 1;
+        var usuarioId =1;
+        var salaId = 1;
         DateTime dataHoraReserva = DateTime.Now;
+        DateTime dataHoraReservaFim = DateTime.Now.AddMinutes(30);
 
-        var reservaEsperada = new Reserva(reservaId, salaId, usuarioId,dataHoraReserva);
+        var reservaEsperada = new Reserva(id,reservaId, salaId, dataHoraReserva, dataHoraReservaFim);
         _reservaRepoMock.Setup(r => r.ObterPorIdAsync(reservaId))
             .ReturnsAsync(reservaEsperada);
 

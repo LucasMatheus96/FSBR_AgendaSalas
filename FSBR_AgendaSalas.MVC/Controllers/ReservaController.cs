@@ -1,4 +1,5 @@
-﻿using FSBR_AgendaSalas.MVC.ViewModels;
+﻿using FSBR_AgendaSalas.Domain.Shared;
+using FSBR_AgendaSalas.MVC.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using System.Text;
@@ -35,18 +36,33 @@ namespace FSBR_AgendaSalas.MVC.Controllers
         public async Task<IActionResult> Create(ReservaViewModel model)
         {
             if (!ModelState.IsValid)
-                return View(model);
+            {
+                TempData["Mensagem"] = "Dados inválidos. Tente novamente.";
+                TempData["ModalAberto"] = "true"; // Definir para manter o modal aberto
+                return RedirectToAction("Index");
+            }
+               
 
             var jsonContent = new StringContent(JsonConvert.SerializeObject(model), Encoding.UTF8, "application/json");
 
             var response = await _httpClient.PostAsync("https://localhost:7081/api/Reserva", jsonContent);
 
             if (response.IsSuccessStatusCode)
-                return RedirectToAction("Index");
+            {
+                var mensagemSucesso = await response.Content.ReadAsStringAsync();
+                TempData["Mensagem"] = JsonConvert.DeserializeObject<ResultadoModal>(mensagemSucesso);
+
+            }
+            else
+            {
+                var mensagemErro = await response.Content.ReadAsStringAsync();
+                var resultado = JsonConvert.DeserializeObject<ResultadoModal>(mensagemErro);
+                TempData["Mensagem"] = resultado?.Erro;
+            }
 
             // Você pode exibir erro retornado pela API se quiser
-            ModelState.AddModelError(string.Empty, "Erro ao criar sala.");
-            return View(model);
+
+            return RedirectToAction("Index");
         }
 
         [HttpPost]
@@ -56,6 +72,17 @@ namespace FSBR_AgendaSalas.MVC.Controllers
                 return RedirectToAction("Index");
 
             var response = await _httpClient.PutAsJsonAsync($"https://localhost:7081/api/Reserva/{model.Id}", model);
+
+            if (response.IsSuccessStatusCode)
+            {
+                var mensagemSucesso = await response.Content.ReadAsStringAsync();
+                TempData["Mensagem"] = mensagemSucesso;
+            }
+            else
+            {
+                var mensagemErro = await response.Content.ReadAsStringAsync();                
+                TempData["Mensagem"] = mensagemErro;
+            }
             return RedirectToAction("Index");
         }
 
@@ -65,5 +92,39 @@ namespace FSBR_AgendaSalas.MVC.Controllers
             var response = await _httpClient.DeleteAsync($"https://localhost:7081/api/Reserva/{id}");
             return RedirectToAction("Index");
         }
+
+
+        [HttpPost]
+        public async Task<IActionResult> Cancelar(int id)
+        {
+            var response = await _httpClient.PostAsync($"https://localhost:7081/api/Reserva/Cancelar/{id}", new StringContent(""));
+            return RedirectToAction("Index");
+        }
+
+        
+        public async Task<IActionResult> GetSalas()
+{
+    var response = await _httpClient.GetAsync("https://localhost:7081/api/Sala");
+    if (response.IsSuccessStatusCode)
+    {
+        var content = await response.Content.ReadAsStringAsync();
+        var salas = JsonConvert.DeserializeObject<List<SalaViewModel>>(content);
+        return Json(salas);
+    }
+    return Json(new List<SalaViewModel>());
+}
+
+// Método para buscar usuários
+public async Task<IActionResult> GetUsuarios()
+{
+    var response = await _httpClient.GetAsync("https://localhost:7081/api/Usuario");
+    if (response.IsSuccessStatusCode)
+    {
+        var content = await response.Content.ReadAsStringAsync();
+        var usuarios = JsonConvert.DeserializeObject<List<UsuarioViewModel>>(content);
+        return Json(usuarios);
+    }
+    return Json(new List<UsuarioViewModel>());
+}
     }
 }

@@ -11,16 +11,17 @@ namespace FSBR_AgendaSalas.Tests.FSBR_AgendaSalas.Domain.Entities
         public void Constructor_DeveCriarSalaComIdGerado_QuandoNomeCapacidadeValidos()
         {
             // Arrange
+            var id = 2;
             var nome = "Sala de Reunião";
             var capacidade = 10;
 
             // Act
-            var sala = new Sala(nome, capacidade);
+            var sala = new Sala( id , nome, capacidade);
 
             // Assert
             sala.Nome.Should().Be(nome);
             sala.Capacidade.Should().Be(capacidade);
-            sala.Id.Should().NotBe(Guid.Empty);
+            sala.Id.Should().NotBe(0);
             sala.Reservas.Should().BeEmpty();
         }
 
@@ -28,7 +29,7 @@ namespace FSBR_AgendaSalas.Tests.FSBR_AgendaSalas.Domain.Entities
         public void Constructor_DeveCriarSalaComIdInformado()
         {
             // Arrange
-            var id = Guid.NewGuid();
+            var id =3;
             var nome = "Sala 2";
             var capacidade = 20;
 

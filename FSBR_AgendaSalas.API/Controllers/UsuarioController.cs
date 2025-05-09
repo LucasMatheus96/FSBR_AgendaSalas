@@ -33,7 +33,7 @@ public class UsuarioController : ControllerBase
     [HttpPost]
     public async Task<ActionResult> Post([FromBody] CriarUsuarioDto dto)
     {
-        var usuario = new Usuario(dto.id,dto.Nome,dto.Email);
+        var usuario = new Usuario(dto.Id,dto.Nome,dto.Email);
         await _usuarioService.AdicionarAsync(usuario);
         return CreatedAtAction(nameof(GetById), new { id = usuario.Id }, null);
     }

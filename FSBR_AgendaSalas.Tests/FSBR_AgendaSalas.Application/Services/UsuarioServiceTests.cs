@@ -21,7 +21,7 @@ public class UsuarioServiceTests
     public async Task ObterPorIdAsync_DeveRetornarUsuario()
     {
         // Arrange
-        var usuarioId = Guid.NewGuid();
+        var usuarioId =1;
         var usuarioNome = "Lucas";
         var usuarioEmail = "lucas@gmail.com";
         var usuario = new Usuario(usuarioId, usuarioNome, usuarioEmail);

@@ -27,6 +27,7 @@ namespace FSBR_AgendaSalas.Infrastructure.Repositories
         {
             return await _context.Reservas
                 .Include(r => r.Sala)
+                .Include(r => r.Usuario)
                 .Where(r => r.SalaId == salaId && r.DataHoraReserva.Date == data.Date)
                 .ToListAsync();
         }
@@ -55,7 +56,25 @@ namespace FSBR_AgendaSalas.Infrastructure.Repositories
 
         public async Task<List<Reserva>> ObterTodasAsync()
         {
-            return await _context.Reservas.ToListAsync();
+            return await _context.Reservas
+                .Include(r => r.Sala)
+                .Include(r => r.Usuario)
+                .ToListAsync();
+        }
+
+        public async Task<List<Reserva>> ObterReservaPorSalaAsync(int salaId, DateTime dataHoraInicio, DateTime dataHoraFim)
+        {
+            return await _context.Reservas
+                .Include(r => r.Sala)
+                .Include(r => r.Usuario)
+                .Where(r => r.SalaId == salaId &&
+                    r.Status != StatusReserva.Cancelada && // opcional, ignora reservas já canceladas
+                    (
+                        (dataHoraInicio >= r.DataHoraReserva && dataHoraInicio < r.DataHoraFimReserva) || // começa durante outra reserva
+                        (dataHoraFim > r.DataHoraReserva && dataHoraFim <= r.DataHoraFimReserva) ||       // termina durante outra reserva
+                        (dataHoraInicio <= r.DataHoraReserva && dataHoraFim >= r.DataHoraFimReserva)     // engloba outra reserva inteira
+                    ))
+                .ToListAsync();
         }
 
     }

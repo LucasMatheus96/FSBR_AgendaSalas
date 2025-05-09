@@ -2,6 +2,8 @@
 
 Projeto completo de **controle de reservas de salas** utilizando **ASP.NET Core Web API**, **MVC (Razor)**, **Entity Framework Core** e **Clean Architecture**. O sistema permite o gerenciamento de usuários, salas e reservas, com regras de negócio como prevenção de conflitos de horário e envio de e-mails de confirmação.
 
+### 🧠 Arquitetura baseada em Domain-Driven Design (DDD)
+Este projeto foi desenvolvido seguindo os princípios do Domain-Driven Design (DDD), promovendo uma separação clara entre as responsabilidades:
 ---
 
 ## 📁 Estrutura do Projeto
@@ -149,6 +151,7 @@ Execute os projetos `FSBR_AgendaSalas.API` e `FSBR_AgendaSalas.MVC`.
 - AutoMapper
 - FluentValidation
 - Clean Architecture
+- Domain-Driven Design (DDD)
 - Injeção de Dependência
 - Swagger (Swashbuckle)
 

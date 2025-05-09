@@ -34,7 +34,7 @@ public class ReservaServiceTests
     public async Task ObterPorIdAsync_DeveRetornarReserva_QuandoExiste()
     {
         // Arrange
-        var id = 1
+        var id = 1;
         var reservaId = 1;
         var usuarioId =1;
         var salaId = 1;

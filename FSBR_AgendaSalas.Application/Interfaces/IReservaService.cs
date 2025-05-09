@@ -6,8 +6,8 @@ namespace FSBR_AgendaSalas.Application.Interfaces
     public interface IReservaService
     {
         Task<Resultado> CriarReservaAsync(int id, int salaId, int usuarioId, DateTime dataHora, DateTime dataHoraFinal, string emailUsuario);
-        Task CancelarReservaAsync(int reservaId);
-        Task DeletarReservaAsync(int reservaId);
+        Task<Resultado> CancelarReservaAsync(int reservaId);
+        Task<Resultado> DeletarReservaAsync(int reservaId);
 
         Task<Reserva> ObterPorIdAsync(int id);
         Task<List<Reserva>> ObterReservasPorSalaAsync(int salaId, DateTime data);

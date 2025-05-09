@@ -1,10 +1,13 @@
+using FSBR_AgendaSalas.Application.Configuration;
 using FSBR_AgendaSalas.Domain.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+builder.Services.Configure<ApiSettings>(builder.Configuration.GetSection("ApiSettings"));
 builder.Services.AddHttpClient();
+
 
 var app = builder.Build();
 

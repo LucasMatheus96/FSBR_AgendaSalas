@@ -55,23 +55,43 @@ namespace FSBR_AgendaSalas.Application.Services
 
         }
 
-        public async Task CancelarReservaAsync(int reservaId)
+        public async Task<Resultado> CancelarReservaAsync(int reservaId)
         {
-            var reserva = await _reservaRepository.ObterPorIdAsync(reservaId);
-            if (reserva == null) throw new Exception("Reserva não encontrada.");
-            
-            reserva.CancelarReserva();
-            await _reservaRepository.AtualizarAsync(reserva);
+            try
+            {
+                var reserva = await _reservaRepository.ObterPorIdAsync(reservaId);
+                if (reserva == null) return Resultado.Falha("Reserva não encontrada.");
+
+                reserva.CancelarReserva();
+                await _reservaRepository.AtualizarAsync(reserva);
+
+                return Resultado.Ok("Reserva cancelada com sucesso");
+            }
+            catch (Exception e)
+            {
+                return Resultado.Falha(e.Message);
+            }
+           
         }
 
-        public async Task DeletarReservaAsync(int reservaId)
+        public async Task<Resultado> DeletarReservaAsync(int reservaId)
         {
-            var reserva = await _reservaRepository.ObterPorIdAsync(reservaId);
-            if (reserva == null)
-                throw new Exception("Reserva não encontrada.");
+            try
+            {
+                var reserva = await _reservaRepository.ObterPorIdAsync(reservaId);
+                if (reserva == null)
+                    return Resultado.Falha("Reserva não encontrada.");
 
-            // Deletar a reserva no repositório
-            await _reservaRepository.DeletarAsync(reservaId);
+                // Deletar a reserva no repositório
+                await _reservaRepository.DeletarAsync(reservaId);
+
+                return Resultado.Ok("Reserva excluida com sucesso.");
+            }
+            catch (Exception)
+            {
+                return Resultado.Falha("Falha ao excluir reserva");
+            }
+           
         }
 
         public async Task<Reserva> ObterPorIdAsync(int id)
@@ -92,20 +112,28 @@ namespace FSBR_AgendaSalas.Application.Services
 
         public async Task<Resultado> AtualizarAsync(Reserva reserva)
         {
-            var reservaExistente = await _reservaRepository.ObterPorIdAsync(reserva.Id);
-            if (reservaExistente == null)
+            try
             {
-                return Resultado.Falha("Reserva não encontrada para atualização.");
+                var reservaExistente = await _reservaRepository.ObterPorIdAsync(reserva.Id);
+                if (reservaExistente == null)
+                {
+                    return Resultado.Falha("Reserva não encontrada para atualização.");
+                }
+
+                if (reserva.DataHoraFimReserva != reservaExistente.DataHoraFimReserva || reserva.DataHoraReserva != reservaExistente.DataHoraReserva)
+                {
+                    var reservas = await _reservaRepository.ObterReservaPorSalaAsync(reserva.SalaId, reserva.DataHoraReserva, reserva.DataHoraFimReserva);
+                    if (reservas.Any()) return Resultado.Falha("Já existe uma reserva para esta sala neste horário.");
+                }
+                await _reservaRepository.AtualizarAsync(reserva);
+
+                return Resultado.Ok("Reserva criada com sucesso");
             }
-
-            if(reserva.DataHoraFimReserva != reservaExistente.DataHoraFimReserva || reserva.DataHoraReserva != reservaExistente.DataHoraReserva)
+            catch (Exception)
             {
-                var reservas = await _reservaRepository.ObterReservaPorSalaAsync(reservaExistente.SalaId, reservaExistente.DataHoraReserva, reservaExistente.DataHoraFimReserva);
-                if (reservas.Any()) return Resultado.Falha("Já existe uma reserva para esta sala neste horário.");
-            }           
-            await _reservaRepository.AtualizarAsync(reserva);
-
-            return Resultado.Ok("Reserva criada com sucesso");
+                return Resultado.Falha("Falha ao criar reserva.");
+            }
+         
         }
 
 

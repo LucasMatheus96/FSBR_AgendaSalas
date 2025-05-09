@@ -1,5 +1,7 @@
-﻿using FSBR_AgendaSalas.MVC.ViewModels;
+﻿using FSBR_AgendaSalas.Application.Configuration;
+using FSBR_AgendaSalas.MVC.ViewModels;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using System.Text;
 
@@ -8,16 +10,18 @@ namespace FSBR_AgendaSalas.MVC.Controllers
     public class SalaController : Controller
     {
         private readonly HttpClient _httpClient;
+        private readonly string _baseUrl;
 
 
-        public SalaController(HttpClient httpClient)
+        public SalaController(HttpClient httpClient, IOptions<ApiSettings> options)
         {
             _httpClient = httpClient;
+            _baseUrl = options.Value.BaseUrl;
         }
         public async Task<IActionResult> Index()
         {
             
-            var response = await _httpClient.GetAsync("https://localhost:7081/api/sala"); 
+            var response = await _httpClient.GetAsync($"{_baseUrl}/api/sala"); 
 
             if (response.IsSuccessStatusCode)
             {
@@ -39,7 +43,7 @@ namespace FSBR_AgendaSalas.MVC.Controllers
 
             var jsonContent = new StringContent(JsonConvert.SerializeObject(model), Encoding.UTF8, "application/json");
 
-            var response = await _httpClient.PostAsync("https://localhost:7081/api/sala", jsonContent);
+            var response = await _httpClient.PostAsync($"{_baseUrl}/api/sala", jsonContent);
 
             if (response.IsSuccessStatusCode)
                 return RedirectToAction("Index");
@@ -55,14 +59,14 @@ namespace FSBR_AgendaSalas.MVC.Controllers
             if (!ModelState.IsValid)
                 return RedirectToAction("Index");
 
-            var response = await _httpClient.PutAsJsonAsync($"https://localhost:7081/api/sala/{model.Id}", model);
+            var response = await _httpClient.PutAsJsonAsync($"{_baseUrl}/api/sala/{model.Id}", model);
             return RedirectToAction("Index");
         }
 
         [HttpPost]
         public async Task<IActionResult> Delete(int id)
         {
-            var response = await _httpClient.DeleteAsync($"https://localhost:7081/api/sala/{id}");
+            var response = await _httpClient.DeleteAsync($"{_baseUrl}/api/sala/{id}");
             return RedirectToAction("Index");
         }
     }

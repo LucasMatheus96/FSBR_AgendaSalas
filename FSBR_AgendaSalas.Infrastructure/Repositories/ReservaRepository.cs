@@ -20,6 +20,7 @@ namespace FSBR_AgendaSalas.Infrastructure.Repositories
             return await _context.Reservas
                 .Include(r => r.Sala)
                 .Include(r => r.Usuario)
+                .AsNoTracking()
                 .FirstOrDefaultAsync(r => r.Id == id);
         }
 

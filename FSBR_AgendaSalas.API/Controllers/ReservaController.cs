@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using FSBR_AgendaSalas.API.DTOs.Sala;
 using FSBR_AgendaSalas.Domain.Entities;
 using FSBR_AgendaSalas.Application.Services;
+using FSBR_AgendaSalas.Domain.Shared;
 
 namespace FSBR_AgendaSalas.API.Controllers
 {
@@ -35,8 +36,14 @@ namespace FSBR_AgendaSalas.API.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> Deletar(int id)
         {
-            await _reservaService.DeletarReservaAsync(id);
-            return NoContent();
+            var resultado = await _reservaService.DeletarReservaAsync(id);
+            if (resultado.Sucesso)
+            {
+                return Ok(new { mensagem = resultado.Mensagem });
+
+            }
+
+            return BadRequest(new { erro = resultado.Mensagem });
         }
 
         [HttpGet("{id}")]
@@ -69,8 +76,14 @@ namespace FSBR_AgendaSalas.API.Controllers
         [HttpPost("cancelar/{id}")]
         public async Task<IActionResult> Cancelar(int id)
         {
-            await _reservaService.CancelarReservaAsync(id);
-            return NoContent();
+           var resultado =  await _reservaService.CancelarReservaAsync(id);
+
+            if (resultado.Sucesso)
+            {
+                return Ok(new { mensagem = resultado.Mensagem });
+            }
+
+            return BadRequest(new { erro = resultado.Mensagem });            
         }
 
 

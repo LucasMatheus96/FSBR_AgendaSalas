@@ -1,4 +1,7 @@
-﻿namespace FSBR_AgendaSalas.Domain.Shared
+﻿
+using System.Text.Json.Serialization;
+
+namespace FSBR_AgendaSalas.Domain.Shared
 {
     public class Resultado
     {
@@ -28,7 +31,17 @@
         public string Erro { get; set; }
 
         public string Mensagem { get; set; }
+    
+    }
 
-        public string mensagem { get; set; }
+
+    public class MensagemResponse
+    {   
+
+        public string Mensagem { get; set; }
+
+        [JsonPropertyName("erro")]
+        public string Erro { get; set; }
+
     }
 }
